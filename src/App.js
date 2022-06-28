@@ -1,6 +1,6 @@
 import './App.css';
-import React from "react"
-var requestURI = 'https://localhost:5001/api/people/all';
+import React, { useEffect } from "react"
+var requestURI = 'https://localhost:5001/api/people/';
 const axios = require('axios');
 
 
@@ -13,21 +13,26 @@ const axios = require('axios');
 //  })
 
 
-
 function App() {
 
   const [dbData, setDBdata] = React.useState();
 
-  axios.get(requestURI).then(function(responce) {
-    // console.log(responce)
-     setDBdata(responce.data);
- })
+  useEffect(()=>{
+    axios.get(requestURI+"all").then(function(response) {
+        console.log(response)
+      if(response.status === "200") {
+        setDBdata(response);
+      }
+      console.log(dbData)
+   })
+  },[])
+  
 
   return (
   <div className="App">
       <h2>List of people</h2>
       <PeopleTable dbData={dbData}/>
-    </div>
+  </div>
   );
   
 }
@@ -40,37 +45,24 @@ function sortByName() {
 
 
 function PeopleTable(dbData) {
-  console.log(dbData)
+   console.log(dbData)
+
   return(
     <>
     <table className='PeopleList'>
       <thead>
         <tr>
           <th>Id</th>
-          <th onClick={sortByName()}>Name</th>
+          <th>Name</th>
           <th>Phone Nubmer</th>
           <th>City</th>
         </tr>
       </thead>
       <tbody>
-        <PeopleTableEntry entry={dbData[0]}/>
+        {}
       </tbody>
     </table>
     </>
-  )
-}
-
-
-function PeopleTableEntry(entry) {
-  // console.log(entry)
-  return (
-    <>
-     <tr>
-        <td>{entry.Id}</td>
-        <td>{entry.Name}</td>    
-     </tr>
-    </>
-
   )
 }
 
